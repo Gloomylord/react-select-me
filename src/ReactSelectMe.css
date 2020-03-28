@@ -6,11 +6,39 @@
   --color-shark: #2D3136;
   --color-black: #000;
   --color-seashell: #F1F1F1;
+	--color-group: #cfcfcf;
   --line-height: 20px;
 }
 
 .dd__wrapper {
   position: relative;
+}
+
+.group{
+	padding: 10px;
+	line-height: var(--color-seashell);
+	background-color:var(--color-group) ;
+	white-space: nowrap;
+	font-weight: 600;
+}
+
+.tab:focus {
+	background-color:var(--color-seashell);
+}
+
+.pl{
+	padding-left: 25px !important;
+}
+
+
+.valueClear{
+	margin-right: 5px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.valueClear{
+	opacity: 0.6;
 }
 
 .dd__opened {

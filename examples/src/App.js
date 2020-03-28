@@ -20,6 +20,20 @@ const options = [
   { value: 'coral', label: 'Coral' },
 ];
 
+const optionsWithOptgroup = [
+  { group:'group1', value: null, label: 'group1' },
+  { value: 'red', label: 'Red',group:'group1' },
+  { value: 'blue', label: 'Blue',group:'group1' },
+  { value: 'green', label: 'Green',group:'group1' },
+  { group:'group2', value: null, label: 'group2' },
+  { value: 'gray', label: 'Gray',group:'group2' },
+  { value: 'brown ', label: 'Brown ',group:'group2' },
+  { value: 'cyan', label: 'Cyan',group:'group2' },
+  { value: 'magenta', label: 'Magenta' ,group:'group2'},
+  { value: 'coral', label: 'Coral' ,group:'group2'},
+];
+
+
 const LINK = 'https://github.com/maslianok/react-select-me/';
 
 const numOfRows = 2000;
@@ -49,7 +63,9 @@ export default class App extends Component {
         optionRenderer: checkboxProps,
         placeholder: checkboxProps,
         s: checkboxProps,
+          optgroup: checkboxProps,
         searchable: checkboxProps,
+        clearable: checkboxProps,
         selectedBlockRenderer: checkboxProps,
         selectedValueRenderer: checkboxProps,
         value: checkboxProps,
@@ -101,6 +117,14 @@ export default class App extends Component {
             checked: false,
           },
         };
+        break;
+      case 'clearable':
+        newState[name] = checked;
+        break;
+      case 'optgroup':
+        newState[name] = checked;
+        newState.value = undefined;
+        newState.options = checked ? optionsWithOptgroup : options;
         break;
       case 'searchable':
         newState[name] = checked;
@@ -247,9 +271,13 @@ export default class App extends Component {
 
   onSearch = searchString => {
     const lowerString = searchString.toLowerCase();
-    const currOptions = this.state.virtualized ? tonsOfOptions : options;
+    const currOptions = this.state.virtualized ? tonsOfOptions :
+        (!this.state.optgroup ? options: optionsWithOptgroup);
     this.setState({
-      options: searchString ? currOptions.filter(o => o.label.toLowerCase().indexOf(lowerString) > -1) : currOptions,
+      options: searchString ? currOptions.filter(o => {
+        return (o.label.toLowerCase().indexOf(lowerString) > -1 ||
+            (o.group && o.group.toLowerCase().indexOf(lowerString) > -1))
+      } ) : currOptions,
     });
   };
 
@@ -365,7 +393,9 @@ export default class App extends Component {
             <div className="columnTitle">General</div>
             <div className="propsList">
               {this.getCheckboxFor('multiple', 'Multiple', 'multiple-bool')}
+              {this.getCheckboxFor('clearable', 'Clearable', 'clearable-bool')}
               {this.getCheckboxFor('searchable', 'Searchable', 'searchable-bool')}
+              {this.getCheckboxFor('optgroup', 'Optgroup', 'optgroup-bool')}
               {this.getCheckboxFor('addNewItem', '"Add new" option')}
               {this.getCheckboxFor('virtualized', 'Virtualized (2k options)', 'virtualized-bool')}
             </div>
